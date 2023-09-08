@@ -1,4 +1,4 @@
-package edu.birzeit.nidlibraheem.finalproject.ui.gallery;
+package edu.birzeit.nidlibraheem.finalproject.ui.sorted;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import edu.birzeit.nidlibraheem.finalproject.databinding.FragmentGalleryBinding;
+import edu.birzeit.nidlibraheem.finalproject.databinding.FragmentSortedBinding;
 
-public class GalleryFragment extends Fragment {
+public class SortedFragment extends Fragment {
 
-    private FragmentGalleryBinding binding;
+    private FragmentSortedBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+        SortedViewModel slideshowViewModel =
+                new ViewModelProvider(this).get(SortedViewModel.class);
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        binding = FragmentSortedBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textGallery;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textSorted;
+        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

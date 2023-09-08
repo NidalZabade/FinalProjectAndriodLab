@@ -3,23 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_all">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="edu.birzeit.nidlibraheem.finalproject.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_all"
+        android:name="edu.birzeit.nidlibraheem.finalproject.ui.all.AllFragment"
+        android:label="@string/menu_all"
+        tools:layout="@layout/fragment_all" />
+
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="edu.birzeit.nidlibraheem.finalproject.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_favorite"
+        android:name="edu.birzeit.nidlibraheem.finalproject.ui.favorite.FavoriteFragment"
+        android:label="@string/menu_favorite"
+        tools:layout="@layout/fragment_favorite" />
+
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="edu.birzeit.nidlibraheem.finalproject.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_sorted"
+        android:name="edu.birzeit.nidlibraheem.finalproject.ui.sorted.SortedFragment"
+        android:label="@string/menu_sorted"
+        tools:layout="@layout/fragment_sorted" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="edu.birzeit.nidlibraheem.finalproject.ui.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>

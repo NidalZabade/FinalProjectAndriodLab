@@ -1,4 +1,4 @@
-package edu.birzeit.nidlibraheem.finalproject.ui.slideshow;
+package edu.birzeit.nidlibraheem.finalproject.ui.all;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,23 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import edu.birzeit.nidlibraheem.finalproject.databinding.FragmentSlideshowBinding;
+import edu.birzeit.nidlibraheem.finalproject.MainActivity;
+import edu.birzeit.nidlibraheem.finalproject.databinding.FragmentAllBinding;
 
-public class SlideshowFragment extends Fragment {
+public class AllFragment extends Fragment {
 
-    private FragmentSlideshowBinding binding;
+    private FragmentAllBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SlideshowViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        AllViewModel allViewModel =
+                new ViewModelProvider(this).get(AllViewModel.class);
 
-        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
+        binding = FragmentAllBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textAll;
+        textView.setText("Welcome " + MainActivity.loggedInUser.getFirstName());
         return root;
     }
 
