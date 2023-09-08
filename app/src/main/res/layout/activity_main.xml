@@ -1,101 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:gravity="center"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="315dp"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/loginscreen" />
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="20dp"
-        android:background="@drawable/custom_edittext">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="310dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/loginscreen" />
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_margin="30dp"
+            android:background="@drawable/custom_edittext"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="20dp">
 
-            <TextView
-                android:id="@+id/loginText_main"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
-                android:textAlignment="center"
-                android:textColor="@color/light_blue"
-                android:textSize="36sp"
-                android:textStyle="bold" />
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/custom_edittext"
-                android:drawableLeft="@drawable/baseline_alternate_email_24"
-                android:drawablePadding="8dp"
-                android:hint="Email"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                <TextView
+                    android:id="@+id/loginText_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Login"
+                    android:textAlignment="center"
+                    android:textColor="@color/light_blue"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edittext"
-                android:drawableLeft="@drawable/baseline_lock_24"
-                android:drawablePadding="8dp"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
-            <CheckBox
-                android:id="@+id/rememberMe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remember Me"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="40dp"
+                    android:background="@drawable/custom_edittext"
+                    android:drawableLeft="@drawable/baseline_alternate_email_24"
+                    android:drawablePadding="8dp"
+                    android:hint="Email"
+                    android:padding="8dp"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/cardview_dark_background" />
 
-            <Button
-                android:id="@+id/loginButton"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="Login"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:backgroundTint="@color/light_blue"
-                android:textColor="@color/white"
-                app:cornerRadius="20dp" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/custom_edittext"
+                    android:drawableLeft="@drawable/baseline_lock_24"
+                    android:drawablePadding="8dp"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="8dp"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/cardview_dark_background" />
 
-    <TextView
-        android:id="@+id/signupText_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="Not yet registered? SignUp Now"
-        android:textSize="14sp"
-        android:textAlignment="center"
-        android:textColor="@color/light_blue"
-        android:layout_marginBottom="20dp"/>
+                <CheckBox
+                    android:id="@+id/rememberMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remember Me"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
+                <Button
+                    android:id="@+id/loginButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/light_blue"
+                    android:text="Login"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/signupText_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:padding="8dp"
+            android:text="Not yet registered? SignUp Now"
+            android:textAlignment="center"
+            android:textColor="@color/light_blue"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</ScrollView>

@@ -15,8 +15,8 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="364dp"
-            android:layout_height="259dp"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
             android:src="@drawable/signup" />
 
         <androidx.cardview.widget.CardView
@@ -47,7 +47,7 @@
                     android:id="@+id/signupEmail"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="15dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/baseline_alternate_email_24"
                     android:drawablePadding="8dp"
@@ -60,7 +60,7 @@
                     android:id="@+id/firstName"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/baseline_person_24"
                     android:drawablePadding="8dp"
@@ -73,7 +73,7 @@
                     android:id="@+id/lastName"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/baseline_person_24"
                     android:drawablePadding="8dp"
@@ -86,7 +86,7 @@
                     android:id="@+id/signupPassword"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/baseline_lock_24"
                     android:drawablePadding="8dp"
@@ -100,7 +100,7 @@
                     android:id="@+id/signupConfirm"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/custom_edittext"
                     android:drawableLeft="@drawable/baseline_password_24"
                     android:drawablePadding="8dp"
@@ -111,7 +111,7 @@
                     android:id="@+id/signupButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
+                    android:layout_margin="20dp"
                     android:backgroundTint="@color/light_blue"
                     android:text="Sign Up"
                     android:textStyle="bold"
