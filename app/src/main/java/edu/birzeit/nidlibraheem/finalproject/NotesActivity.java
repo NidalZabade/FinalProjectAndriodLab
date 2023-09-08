@@ -3,6 +3,8 @@ package edu.birzeit.nidlibraheem.finalproject;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -16,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.birzeit.nidlibraheem.finalproject.databinding.ActivityNotesBinding;
+import edu.birzeit.nidlibraheem.finalproject.models.User;
 
 public class NotesActivity extends AppCompatActivity {
 
@@ -56,6 +59,7 @@ public class NotesActivity extends AppCompatActivity {
         TextView email = navigationView.getHeaderView(0).findViewById(R.id.emailTV);
 
         email.setText(MainActivity.loggedInUser.getEmail());
+
 
 
     }
