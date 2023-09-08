@@ -19,7 +19,7 @@ public class ORM extends SQLiteOpenHelper {
 
     public static synchronized ORM getInstance(Context context) {
         if (instance == null) {
-            instance = new ORM(context, "notes_app_db", null, 2);
+            instance = new ORM(context, "notes_app_db", null, 3);
         }
         return instance;
     }
@@ -66,7 +66,11 @@ public class ORM extends SQLiteOpenHelper {
 
     public long insertUser(User user) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM users WHERE email = ?", new String[]{user.getEmail()});
+        if (cursor.getCount() != 0) {
+            System.out.println("User with this email already exists");
+            return -1;
+        }
         String hashed_password = PasswordHash.hashPassword(user.getPassword());
 
         ContentValues contentValues = new ContentValues();
@@ -108,8 +112,6 @@ public class ORM extends SQLiteOpenHelper {
 
         System.out.println("Wrong password");
         return null;
-
-
     }
 
 }

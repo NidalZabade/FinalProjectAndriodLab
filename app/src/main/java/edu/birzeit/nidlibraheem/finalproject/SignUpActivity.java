@@ -114,7 +114,12 @@ public class SignUpActivity extends AppCompatActivity {
 
                 User user = new User(email, firstName, lastName, password, confirmPassword);
 
-                orm.insertUser(user);
+                long id = orm.insertUser(user);
+
+                if (id == -1) {
+                    emailTF.setError("User with this email already exists");
+                    return;
+                }
 
                 MainActivity.loggedInUser = user;
 
