@@ -119,7 +119,6 @@ public class ORM extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("FIRSTNAME", firstName);
         contentValues.put("LASTNAME", lastName);
-        contentValues.put("EMAIL", email);
         contentValues.put("password_hash", password);
         sqLiteDatabase.update("USERS", contentValues, "email = ?", new String[]{email});
         return getUser(email);
