@@ -9,28 +9,28 @@ public class Note {
     private String content;
     private Date creationDate;
     private boolean isFavorite;
-    private User owner;
+    private long owner_id;
     private Tag tag;
 
     public Note() {
     }
 
-    public Note(String title, String content, Date creationDate, boolean isFavorite, User owner, Tag tag) {
+    public Note(String title, String content, Date creationDate, boolean isFavorite, long owner_id, Tag tag) {
         this.title = title;
         this.content = content;
         this.creationDate = creationDate;
         this.isFavorite = isFavorite;
-        this.owner = owner;
+        this.owner_id = owner_id;
         this.tag = tag;
     }
 
-    public Note (long id, String title, String content, Date creationDate, boolean isFavorite, User owner, Tag tag) {
+    public Note (long id, String title, String content, Date creationDate, boolean isFavorite, int owner_id, Tag tag) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.creationDate = creationDate;
         this.isFavorite = isFavorite;
-        this.owner = owner;
+        this.owner_id = owner_id;
         this.tag = tag;
     }
 
@@ -56,8 +56,8 @@ public class Note {
     }
 
 
-    public User getOwner() {
-        return owner;
+    public long getOwnerId() {
+        return owner_id;
     }
 
     public Tag getTag() {
@@ -79,8 +79,8 @@ public class Note {
         this.isFavorite = isFavorite;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setOwnerId(long owner_id) {
+        this.owner_id = owner_id;
     }
 
     public void setTag(Tag tag) {

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import edu.birzeit.nidlibraheem.finalproject.MainActivity;
 import edu.birzeit.nidlibraheem.finalproject.ORM;
@@ -86,7 +87,11 @@ public class ProfileFragment extends Fragment {
                 }
 
                 try {
-                    User.validatePassword(password, confirmPassword);
+
+                    if ( ! ( password.isEmpty() && confirmPassword.isEmpty() ) ) {
+                        User.validatePassword(password, confirmPassword);
+                    }
+
                 } catch (IllegalArgumentException e) {
                     passwordTF.setError(e.getMessage());
                     error_flag = true;
@@ -97,7 +102,12 @@ public class ProfileFragment extends Fragment {
                 }
 
                 ORM orm = ORM.getInstance(getContext());
-                MainActivity.loggedInUser = orm.updateUser(MainActivity.loggedInUser.getEmail(), firstName, lastName, password);
+
+                if  ( password.isEmpty() && confirmPassword.isEmpty() ) {
+                    MainActivity.loggedInUser = orm.updateUser(MainActivity.loggedInUser.getEmail(), firstName, lastName, null);
+                }else{
+                    MainActivity.loggedInUser = orm.updateUser(MainActivity.loggedInUser.getEmail(), firstName, lastName, password);
+                }
                 Toast.makeText(getContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
 
             }

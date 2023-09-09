@@ -20,7 +20,7 @@ public class ORM extends SQLiteOpenHelper {
 
     public static synchronized ORM getInstance(Context context) {
         if (instance == null) {
-            instance = new ORM(context, "notes_app_db", null, 6);
+            instance = new ORM(context, "notes_app_db", null, 7);
         }
         return instance;
     }
@@ -49,7 +49,7 @@ public class ORM extends SQLiteOpenHelper {
                         "    creationDate DATETIME," +
                         "    isFavorite INTEGER," +
                         "    owner_id INTEGER NOT NULL REFERENCES users(user_id)," +
-                        "    tag_id INTEGER NOT NULL REFERENCES tags(tag_id)" +
+                        "    tag_id INTEGER REFERENCES tags(tag_id)" +
 
                         ");");
     }
@@ -120,9 +120,15 @@ public class ORM extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("FIRSTNAME", firstName);
         contentValues.put("LASTNAME", lastName);
-        String hashed_password = PasswordHash.hashPassword(password);
-        contentValues.put("password_hash", hashed_password);
+
+        if (password != null) {
+            String hashed_password = PasswordHash.hashPassword(password);
+            contentValues.put("password_hash", hashed_password);
+        }
+
         sqLiteDatabase.update("USERS", contentValues, "email = ?", new String[]{email});
+
+        sqLiteDatabase.close();
 
         return getUser(email);
     }
@@ -148,11 +154,13 @@ public class ORM extends SQLiteOpenHelper {
         contentValues.put("content", note.getContent());
         contentValues.put("creationDate", note.getCreationDate().toString());
         contentValues.put("isFavorite", note.isFavorite());
-        contentValues.put("owner_id", note.getOwner().getId());
-        contentValues.put("tag_id", note.getTag().getId());
+        contentValues.put("owner_id", note.getOwnerId());
+//        contentValues.put("tag_id", note.getTag().getId());
         long insertedRowId = sqLiteDatabase.insert("notes", null, contentValues);
         sqLiteDatabase.close();
         note.setId(insertedRowId);
+
+
         return insertedRowId;
     }
 

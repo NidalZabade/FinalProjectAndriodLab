@@ -11,15 +11,20 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 import edu.birzeit.nidlibraheem.finalproject.databinding.ActivityNotesBinding;
 import edu.birzeit.nidlibraheem.finalproject.models.User;
+import edu.birzeit.nidlibraheem.finalproject.ui.all.AllFragment;
 
 public class NotesActivity extends AppCompatActivity {
 
@@ -40,6 +45,9 @@ public class NotesActivity extends AppCompatActivity {
                 //go to add note activity
                 Intent intent = new Intent(NotesActivity.this, AddNoteActivity.class);
                 startActivity(intent);
+
+                refresh();
+
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
@@ -50,9 +58,13 @@ public class NotesActivity extends AppCompatActivity {
                 R.id.nav_all, R.id.nav_favorite,R.id.nav_sorted, R.id.nav_profile)
                 .setOpenableLayout(drawer)
                 .build();
+
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_notes);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
 
         TextView userName = navigationView.getHeaderView(0).findViewById(R.id.usernameTV);
 
@@ -61,6 +73,13 @@ public class NotesActivity extends AppCompatActivity {
         TextView email = navigationView.getHeaderView(0).findViewById(R.id.emailTV);
 
         email.setText(MainActivity.loggedInUser.getEmail());
+
+
+
+    }
+
+
+    public void refresh() {
 
 
 

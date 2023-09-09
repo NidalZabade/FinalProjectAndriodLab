@@ -37,7 +37,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 note.setContent(content);
                 note.setCreationDate(new Date());
                 note.setIsFavorite(false);
-                note.setOwner(MainActivity.loggedInUser);
+                note.setOwnerId(MainActivity.loggedInUser.getId());
                 orm.insertNote(note);
                 Toast.makeText(this, "Note added successfully with id: " + note.getId(), Toast.LENGTH_SHORT).show();
                 finish();

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import edu.birzeit.nidlibraheem.finalproject.MainActivity;
 import edu.birzeit.nidlibraheem.finalproject.ORM;
@@ -33,11 +34,32 @@ public class AllFragment extends Fragment {
         cursor = ORM.getInstance(getContext()).getAllNotes(MainActivity.loggedInUser);
         String notes = "";
         while (cursor.moveToNext()) {
-            notes += cursor.getString(1) + "\n";
+            notes += cursor.getString(1) + "Note: \n";
         }
         textView.setText(notes);
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshData();
+        System.out.println("\nonResume...\n");
+    }
+
+    interface refreshCommunicator {
+        public void refresh();
+    }
+
+    public void refreshData(){
+        Cursor cursor;
+        cursor = ORM.getInstance(getContext()).getAllNotes(MainActivity.loggedInUser);
+        String notes = "";
+        while (cursor.moveToNext()) {
+            notes += cursor.getString(1) + "Note: \n";
+        }
+        binding.textAll.setText(notes);
     }
 
     @Override
