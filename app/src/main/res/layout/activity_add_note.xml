@@ -26,7 +26,17 @@
         android:id="@+id/contentET"
         android:layout_width="match_parent"
         android:layout_height="600px"
-        android:hint="Content"
+        android:hint="Content\n\nLorem ipsum"
+        android:inputType="textMultiLine"
+        android:padding="16dp"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/tagET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tag"
+        android:inputType="text"
         android:padding="16dp"
         android:textSize="18sp" />
 

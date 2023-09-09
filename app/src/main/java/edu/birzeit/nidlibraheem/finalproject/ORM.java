@@ -6,6 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 import edu.birzeit.nidlibraheem.finalproject.models.Note;
 import edu.birzeit.nidlibraheem.finalproject.models.User;
 import edu.birzeit.nidlibraheem.finalproject.utils.PasswordHash;
@@ -13,6 +19,7 @@ import edu.birzeit.nidlibraheem.finalproject.utils.PasswordHash;
 public class ORM extends SQLiteOpenHelper {
 
     private static ORM instance;
+    public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private ORM(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -20,7 +27,7 @@ public class ORM extends SQLiteOpenHelper {
 
     public static synchronized ORM getInstance(Context context) {
         if (instance == null) {
-            instance = new ORM(context, "notes_app_db", null, 7);
+            instance = new ORM(context, "notes_app_db", null, 11);
         }
         return instance;
     }
@@ -34,13 +41,7 @@ public class ORM extends SQLiteOpenHelper {
                 "    lastName TEXT," +
                 "    password_hash TEXT NOT NULL" +
                 ");");
-        sqLiteDatabase.execSQL(
-                "CREATE TABLE tags (" +
-                        "    tag_id INTEGER PRIMARY KEY," +
-                        "    owner_id INTEGER NOT NULL," +
-                        "    tag_name TEXT NOT NULL," +
-                        "    FOREIGN KEY (owner_id) REFERENCES Users(user_id)" +
-                        ");");
+
         sqLiteDatabase.execSQL(
                 "CREATE TABLE notes (" +
                         "    note_id INTEGER PRIMARY KEY," +
@@ -49,16 +50,21 @@ public class ORM extends SQLiteOpenHelper {
                         "    creationDate DATETIME," +
                         "    isFavorite INTEGER," +
                         "    owner_id INTEGER NOT NULL REFERENCES users(user_id)," +
-                        "    tag_id INTEGER REFERENCES tags(tag_id)" +
-
+                        "    tags TEXT" +
                         ");");
+
+//        insert a dummy user for testing
+
+        String hash = PasswordHash.hashPassword("123");
+
+        sqLiteDatabase.execSQL("INSERT INTO users (email, firstName, lastName, password_hash) VALUES ('a@b.c' , 'Nidal', 'Alyan', '" + hash + "')");
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS notes");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS tags");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS users");
 
         onCreate(sqLiteDatabase);
@@ -114,6 +120,7 @@ public class ORM extends SQLiteOpenHelper {
         System.out.println("Wrong password");
         return null;
     }
+
     //update user and return the updated user
     public User updateUser(String email, String firstName, String lastName, String password) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
@@ -147,15 +154,17 @@ public class ORM extends SQLiteOpenHelper {
         return new User(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
     }
 
-    public long insertNote(Note note){
+    public long insertNote(Note note) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", note.getTitle());
         contentValues.put("content", note.getContent());
-        contentValues.put("creationDate", note.getCreationDate().toString());
+        contentValues.put("creationDate", dateFormat.format(note.getCreationDate()));
         contentValues.put("isFavorite", note.isFavorite());
         contentValues.put("owner_id", note.getOwnerId());
-//        contentValues.put("tag_id", note.getTag().getId());
+        contentValues.put("tags", note.getTags());
+
+        System.out.println("TAGS: " + note.getTags());
         long insertedRowId = sqLiteDatabase.insert("notes", null, contentValues);
         sqLiteDatabase.close();
         note.setId(insertedRowId);
@@ -164,12 +173,153 @@ public class ORM extends SQLiteOpenHelper {
         return insertedRowId;
     }
 
-        public Cursor getAllNotes(User user) {
+    public ArrayList<Note> getAllNotes(User user) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM notes WHERE owner_id = ?", new String[]{String.valueOf(user.getId())});
-        return cursor;
+
+
+        ArrayList<Note> notes = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            Note note = null;
+            try {
+                note = new Note(
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        dateFormat.parse(cursor.getString(3)),
+                        cursor.getInt(4) == 1,
+                        (int) cursor.getLong(5),
+                        null
+                );
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            notes.add(note);
+        }
+
+        return notes;
     }
 
+    public ArrayList<Note> searchAllNotesForUser(String query, User user){
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM notes WHERE owner_id = ? AND (title LIKE ? OR content LIKE ? OR tags LIKE ?)", new String[]{String.valueOf(user.getId()), "%" + query + "%", "%" + query + "%", "%" + query + "%"});
+
+        ArrayList<Note> notes = new ArrayList<>();
+
+        while (cursor.moveToNext()){
+            Note note = null;
+            try {
+                note = new Note(
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        dateFormat.parse(cursor.getString(3)),
+                        cursor.getInt(4) == 1,
+                        (int) cursor.getLong(5),
+                        cursor.getString(6)
+                );
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            notes.add(note);
+        }
+
+        return notes;
+    }
+
+    public ArrayList<Note> searchAllFavouriteNotesForUser(String query, User user){
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM notes WHERE owner_id = ? AND isFavorite = 1 AND (title LIKE ? OR content LIKE ? OR tags LIKE ?)", new String[]{String.valueOf(user.getId()), "%" + query + "%", "%" + query + "%", "%" + query + "%"});
+
+        ArrayList<Note> notes = new ArrayList<>();
+
+        while (cursor.moveToNext()){
+            Note note = null;
+            try {
+                note = new Note(
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        dateFormat.parse(cursor.getString(3)),
+                        cursor.getInt(4) == 1,
+                        (int) cursor.getLong(5),
+                        cursor.getString(6)
+                );
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            notes.add(note);
+        }
+
+        return notes;
+    }
+
+    public ArrayList<Note> searchAllNotesForUserSortedBy(String query, User user, boolean order_by_title ){
+        // order_by_title = true -> order by title
+        // order_by_title = false -> order by date
+
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = null;
+        if (order_by_title){
+            cursor = sqLiteDatabase.rawQuery("SELECT * FROM notes WHERE owner_id = ? AND (title LIKE ? OR content LIKE ? OR tags LIKE ?) ORDER BY title COLLATE NOCASE ASC;", new String[]{String.valueOf(user.getId()), "%" + query + "%", "%" + query + "%", "%" + query + "%"});
+        } else {
+            cursor = sqLiteDatabase.rawQuery("SELECT * FROM notes WHERE owner_id = ? AND (title LIKE ? OR content LIKE ? OR tags LIKE ?) ORDER BY creationDate", new String[]{String.valueOf(user.getId()), "%" + query + "%", "%" + query + "%", "%" + query + "%"});
+        }
+
+        ArrayList<Note> notes = new ArrayList<>();
+
+        while (cursor.moveToNext()){
+            Note note = null;
+            try {
+                note = new Note(
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        dateFormat.parse(cursor.getString(3)),
+                        cursor.getInt(4) == 1,
+                        (int) cursor.getLong(5),
+                        cursor.getString(6)
+                );
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            notes.add(note);
+        }
+
+        return notes;
+    }
+
+
+
+
+
+
+
+    public void updateNote (Note note){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title", note.getTitle());
+        contentValues.put("content", note.getContent());
+        contentValues.put("tags", note.getTags());
+        contentValues.put("isFavorite", note.isFavorite());
+        sqLiteDatabase.update("notes", contentValues, "note_id = ?", new String[]{String.valueOf(note.getId())});
+        sqLiteDatabase.close();
+    }
+
+    public void deleteNote (Note note){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        sqLiteDatabase.delete("notes", "note_id = ?", new String[]{String.valueOf(note.getId())});
+        sqLiteDatabase.close();
+    }
+
+    public void updateIsFavorite(Note note){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("isFavorite", note.isFavorite());
+        sqLiteDatabase.update("notes", contentValues, "note_id = ?", new String[]{String.valueOf(note.getId())});
+        sqLiteDatabase.close();
+    }
 
 
 }

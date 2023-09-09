@@ -2,9 +2,13 @@ package edu.birzeit.nidlibraheem.finalproject.ui.all;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,9 +16,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.ArrayList;
+
 import edu.birzeit.nidlibraheem.finalproject.MainActivity;
 import edu.birzeit.nidlibraheem.finalproject.ORM;
 import edu.birzeit.nidlibraheem.finalproject.databinding.FragmentAllBinding;
+import edu.birzeit.nidlibraheem.finalproject.models.Note;
+import edu.birzeit.nidlibraheem.finalproject.ui.NotesListAdapter;
 
 public class AllFragment extends Fragment {
 
@@ -28,15 +36,29 @@ public class AllFragment extends Fragment {
         binding = FragmentAllBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textAll;
+        EditText searchField = (EditText) binding.searchEditText;
 
-        Cursor cursor;
-        cursor = ORM.getInstance(getContext()).getAllNotes(MainActivity.loggedInUser);
-        String notes = "";
-        while (cursor.moveToNext()) {
-            notes += cursor.getString(1) + "Note: \n";
-        }
-        textView.setText(notes);
+        searchField.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                    refreshData();
+
+            }
+        });
+
+
+
+        refreshData();
 
         return root;
     }
@@ -45,7 +67,6 @@ public class AllFragment extends Fragment {
     public void onResume() {
         super.onResume();
         refreshData();
-        System.out.println("\nonResume...\n");
     }
 
     interface refreshCommunicator {
@@ -53,13 +74,18 @@ public class AllFragment extends Fragment {
     }
 
     public void refreshData(){
-        Cursor cursor;
-        cursor = ORM.getInstance(getContext()).getAllNotes(MainActivity.loggedInUser);
-        String notes = "";
-        while (cursor.moveToNext()) {
-            notes += cursor.getString(1) + "Note: \n";
-        }
-        binding.textAll.setText(notes);
+
+        ListView listView = (ListView) binding.notesList;
+
+        ORM orm = ORM.getInstance(getContext());
+
+        String query = binding.searchEditText.getText().toString();
+
+        ArrayList<Note> notes = orm.searchAllNotesForUser(query, MainActivity.loggedInUser);
+
+        NotesListAdapter notesAdapter = new NotesListAdapter(getContext(), notes);
+
+        listView.setAdapter(notesAdapter);
     }
 
     @Override

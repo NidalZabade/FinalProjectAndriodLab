@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 import edu.birzeit.nidlibraheem.finalproject.databinding.ActivityNotesBinding;
+import edu.birzeit.nidlibraheem.finalproject.models.Note;
 import edu.birzeit.nidlibraheem.finalproject.models.User;
 import edu.birzeit.nidlibraheem.finalproject.ui.all.AllFragment;
 
@@ -30,6 +31,8 @@ public class NotesActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityNotesBinding binding;
+
+    public static Note selectedNote = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

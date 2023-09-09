@@ -12,7 +12,7 @@ import java.util.Date;
 import edu.birzeit.nidlibraheem.finalproject.models.Note;
 
 public class AddNoteActivity extends AppCompatActivity {
-    EditText titleET, contentET;
+    EditText titleET, contentET, tagsET;
     Button saveBtn;
 
     ORM orm = ORM.getInstance(this);
@@ -21,7 +21,9 @@ public class AddNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
         titleET = findViewById(R.id.titleET);
+        tagsET = findViewById(R.id.tagET);
         contentET = findViewById(R.id.contentET);
+
         saveBtn = findViewById(R.id.save);
 
 
@@ -38,6 +40,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 note.setCreationDate(new Date());
                 note.setIsFavorite(false);
                 note.setOwnerId(MainActivity.loggedInUser.getId());
+                note.setTags(tagsET.getText().toString());
                 orm.insertNote(note);
                 Toast.makeText(this, "Note added successfully with id: " + note.getId(), Toast.LENGTH_SHORT).show();
                 finish();
