@@ -120,7 +120,8 @@ public class ORM extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("FIRSTNAME", firstName);
         contentValues.put("LASTNAME", lastName);
-        contentValues.put("password_hash", password);
+        String hashed_password = PasswordHash.hashPassword(password);
+        contentValues.put("password_hash", hashed_password);
         sqLiteDatabase.update("USERS", contentValues, "email = ?", new String[]{email});
 
         return getUser(email);
