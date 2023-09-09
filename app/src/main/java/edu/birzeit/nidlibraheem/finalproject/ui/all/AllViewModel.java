@@ -8,6 +8,7 @@ public class AllViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
+
     public AllViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is all fragment");

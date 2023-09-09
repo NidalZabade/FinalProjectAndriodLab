@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FinalProject"
         tools:targetApi="31">
         <activity
+            android:name=".AddNoteActivity"
+            android:exported="false" />
+        <activity
             android:name=".NotesActivity"
             android:exported="false"
             android:label="@string/title_activity_notes"

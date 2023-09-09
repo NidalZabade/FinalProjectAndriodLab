@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import edu.birzeit.nidlibraheem.finalproject.models.Note;
 import edu.birzeit.nidlibraheem.finalproject.models.User;
 import edu.birzeit.nidlibraheem.finalproject.utils.PasswordHash;
 
@@ -19,7 +20,7 @@ public class ORM extends SQLiteOpenHelper {
 
     public static synchronized ORM getInstance(Context context) {
         if (instance == null) {
-            instance = new ORM(context, "notes_app_db", null, 5);
+            instance = new ORM(context, "notes_app_db", null, 6);
         }
         return instance;
     }
@@ -121,6 +122,7 @@ public class ORM extends SQLiteOpenHelper {
         contentValues.put("LASTNAME", lastName);
         contentValues.put("password_hash", password);
         sqLiteDatabase.update("USERS", contentValues, "email = ?", new String[]{email});
+
         return getUser(email);
     }
 
@@ -137,6 +139,29 @@ public class ORM extends SQLiteOpenHelper {
 
         return new User(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
     }
+
+    public long insertNote(Note note){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title", note.getTitle());
+        contentValues.put("content", note.getContent());
+        contentValues.put("creationDate", note.getCreationDate().toString());
+        contentValues.put("isFavorite", note.isFavorite());
+        contentValues.put("owner_id", note.getOwner().getId());
+        contentValues.put("tag_id", note.getTag().getId());
+        long insertedRowId = sqLiteDatabase.insert("notes", null, contentValues);
+        sqLiteDatabase.close();
+        note.setId(insertedRowId);
+        return insertedRowId;
+    }
+
+        public Cursor getAllNotes(User user) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM notes WHERE owner_id = ?", new String[]{String.valueOf(user.getId())});
+        return cursor;
+    }
+
+
 
 }
 

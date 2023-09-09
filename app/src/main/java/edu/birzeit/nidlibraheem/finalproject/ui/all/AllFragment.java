@@ -1,5 +1,6 @@
 package edu.birzeit.nidlibraheem.finalproject.ui.all;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.birzeit.nidlibraheem.finalproject.MainActivity;
+import edu.birzeit.nidlibraheem.finalproject.ORM;
 import edu.birzeit.nidlibraheem.finalproject.databinding.FragmentAllBinding;
 
 public class AllFragment extends Fragment {
@@ -26,7 +28,15 @@ public class AllFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textAll;
-        textView.setText("Welcome " + MainActivity.loggedInUser.getFirstName());
+
+        Cursor cursor;
+        cursor = ORM.getInstance(getContext()).getAllNotes(MainActivity.loggedInUser);
+        String notes = "";
+        while (cursor.moveToNext()) {
+            notes += cursor.getString(1) + "\n";
+        }
+        textView.setText(notes);
+
         return root;
     }
 
